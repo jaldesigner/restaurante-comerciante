@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1026907593971",
+    "project_id": "deartis",
+    "storage_bucket": "deartis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026907593971:android:915087451e35d9b815ab86",
+        "android_client_info": {
+          "package_name": "br.com.deartis.usuariodemorestaurante"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1026907593971-v73menlrqphtpafbg6pc85lhmf7tgu1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.deartis.usuariodemorestaurante",
+            "certificate_hash": "1807be8a882713ee5f5353ea8482a36d3b94ed3b"
+          }
+        },
+        {
+          "client_id": "1026907593971-89n179imp5nk736ebvqi95av80tdsafk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQfr29DssvIIdnQafiUVV5YvhjJC5E3YA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1026907593971-89n179imp5nk736ebvqi95av80tdsafk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
