@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, SafeAreaView } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import INF from '../../config';
 import { Btn1 } from '../../components';
 import Estilo from '../../Style/Estilo';
+
+//context
+import {AuthContext} from '../../contexts/auth';
 
 const aut = auth();
 const db = firestore();
@@ -15,6 +18,11 @@ export default function Login({ navigation }) {
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const {user} = useContext(AuthContext);
+
+  function nomeContext(){
+    console.log(user.nome);
+  }
 
   function GravarDados() {
     const userDoc = pathDb.collection("Login")
@@ -66,7 +74,8 @@ export default function Login({ navigation }) {
           </View>
           <View style={Estilo.boxNeutro}>
             <Btn1 fncClique={() => {
-              navigation.navigate('Home');
+              //navigation.navigate('Home');
+              nomeContext();
             }} txt='Entrar' />
           </View>
         </View>

@@ -10,11 +10,10 @@ const Estilo = StyleSheet.create({
     },
     ConteinerCenter: {
         margin:10,
-        flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'stretch',
-        height:'100%',
+       
     },
     //Título nível 1 
     H1: {
