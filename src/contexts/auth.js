@@ -1,16 +1,16 @@
-import { View, Text } from 'react-native';
 import React, {createContext, useState} from 'react';
 
 export const AuthContext = createContext({});
 
 export default function AuthProvider({children}) {
+    const [user, setUser] = useState(null);
 
-    const [user, setUser] = useState({
-        nome: 'Jonas Alves'
-    });
+    async function cadastrarUsuario(email, senha, nome, nivel){
+      
+    }
 
   return (
-    <AuthContext.Provider value={{user}}>
+    <AuthContext.Provider value={{ logado: !!user , user}}>
         {children}
     </AuthContext.Provider>
   )

@@ -3,7 +3,9 @@ import React from 'react';
 import Estilo from '../../Style/Estilo';
 import { Btn2, Card } from '../../components';
 
+
 export default function Home({ navigation }) {
+
   return (
     <SafeAreaView style={Estilo.ContainerGeral}>
       <View style={Estilo.ConteinerCenter}>
