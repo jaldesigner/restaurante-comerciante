@@ -1,10 +1,14 @@
 import { View, Text, Button, SafeAreaView } from 'react-native';
-import React from 'react';
+import React,{useState,useContext} from 'react';
 import Estilo from '../../Style/Estilo';
 import { Btn2, Card } from '../../components';
 
+import {AuthContext} from '../../contexts/auth';
+
 
 export default function Home({ navigation }) {
+
+  const {deslogar} = useContext(AuthContext);
 
   return (
     <SafeAreaView style={Estilo.ContainerGeral}>
@@ -17,6 +21,11 @@ export default function Home({ navigation }) {
           <View style={Estilo.boxNeutro}>
             <Btn2 txt="Montar Cardápio" fncClique={() => {
               navigation.navigate('MontarCardapio');
+            }} />
+          </View>
+          <View style={Estilo.boxNeutro}>
+            <Btn2 txt="SAIR" fncClique={() => {
+              deslogar();
             }} />
           </View>
         </Card>

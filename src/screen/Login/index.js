@@ -4,7 +4,8 @@ import INF from '../../config';
 import { Btn1 } from '../../components';
 import Estilo from '../../Style/Estilo';
 
-//const pathDb = db.collection('Restaurante').doc('IDUNICO');
+import {AuthContext} from '../../contexts/auth';
+
 const INFO = INF();
 
 export default function Login({ navigation }) {
@@ -12,29 +13,16 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  // function GravarDados() {
-  //   const userDoc = pathDb.collection("Login")
-  //     .doc(email)
-  //     .set({
-  //       Usuario: email,
-  //       Senha: senha
-  //     });
-  // }
+  const {cadastrarUsuario} = useContext(AuthContext);
+  const {entrar} = useContext(AuthContext);
 
-  // function CriarUsuario() {
-  //   aut.createUserWithEmailAndPassword(email, senha)
-  //     .then(() => {
-  //       alert('Usuário criado e logado com sucesso!');
-  //     }).catch(error => {
-  //       if (error.code === 'auth/email-already-in-use') {
-  //         alert('E-mail já em uso!');
-  //       }
+  function cad(){
+    cadastrarUsuario('jalinittrader@gmail.com', 'vidaloka', 'Jonas', '1');
+  }
 
-  //       if (error.code === 'auth/invalid-email') {
-  //         alert('Email inválido!');
-  //       }
-  //     })
-  // }
+  function logar(){
+    entrar(email, senha);
+  }
 
   return (
     <SafeAreaView>
@@ -62,7 +50,7 @@ export default function Login({ navigation }) {
           </View>
           <View style={Estilo.boxNeutro}>
             <Btn1 fncClique={() => {
-              //navigation.navigate('Home');
+              logar();
             }} txt='Entrar' />
           </View>
         </View>
