@@ -15,6 +15,11 @@ const Estilo = StyleSheet.create({
         alignItems: 'stretch',
        
     },
+    //Texto comum
+    TxtComum: {
+        color: cores.corTextoGeral,
+    },
+
     //Título nível 1 
     H1: {
         fontSize: 25,

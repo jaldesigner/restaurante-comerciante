@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, {createContext, useState} from 'react';
 import firebase from '../services/firebaseConnect';
 import INF from '../config';
 import { View } from 'react-native';
