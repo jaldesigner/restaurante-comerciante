@@ -1,9 +1,11 @@
 import React, {createContext, useState} from 'react';
-import firebase from '../services/firebaseConnect';
+//import firebase from '../services/firebaseConnect';
+import firestore from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
 import INF from '../config';
 import { View } from 'react-native';
 
-const pathDb = firebase.firestore().collection('Restaurante').doc(INF().ID_APP);
+const pathDb = firestore().collection('Restaurante').doc(INF().ID_APP);
 
 export const AuthContext = createContext({});
 export default function AuthProvider({children}) {
@@ -12,7 +14,7 @@ export default function AuthProvider({children}) {
 
   const estado = () =>{
     try {
-      firebase.auth().currentUser.uid;
+      auth().currentUser.uid;
      return true;
     } catch (error) {
       return false;
@@ -32,12 +34,12 @@ export default function AuthProvider({children}) {
 //jalinittrader@gmail.com
     async function entrar(email, senha){
       
-      await firebase.auth().signInWithEmailAndPassword(email, senha)
+      await auth().signInWithEmailAndPassword(email, senha)
       .then(async (value) => {
         let uid = value.user.uid;
         let eml = value.user.email;
         setOn(true);
-        const userProfile = await pathDb.collection('adm').doc('Usuario').get();
+        /* const userProfile = await pathDb.collection('adm').doc('Usuario').get();
         
         console.log(userProfile.data().senha);
         
@@ -46,9 +48,9 @@ export default function AuthProvider({children}) {
           nome: userProfile.data().nome,
           email: eml,
           nivel: userProfile.data().nivel,
-        }
+        } */
 
-        setUser(data);
+        //setUser(data);
 
       })
       .catch((e)=>{
@@ -57,11 +59,11 @@ export default function AuthProvider({children}) {
     }
 
     async function cadastrarUsuario(email, senha, nome, nivel){
-      await firebase.auth().createUserWithEmailAndPassword(email,senha)
+      await auth().createUserWithEmailAndPassword(email,senha)
       .then(async (value) => {
         let uid = value.user.uid;
         let eml = value.user.email;
-        await firebase.firestore().collection('Restaurante').doc(INF().ID_APP).collection('adm').doc('Usuario').set({
+        await firestore().collection('Restaurante').doc(INF().ID_APP).collection('adm').doc('Usuario').set({
           uid: uid,
           email:eml,
           senha: senha,
