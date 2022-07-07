@@ -61,9 +61,9 @@ const Estilo = StyleSheet.create({
         borderColor: cores.bordasLinhas,
         borderRadius: 7,
         marginBottom: 20,
-        padding:10,
-        backgroundColor:'#4E5063',
-        alignItems:'center',
+        padding: 10,
+        backgroundColor: '#4E5063',
+        alignItems: 'center',
     },
     boxNeutro: {
         marginTop: 10,
@@ -78,10 +78,10 @@ const Estilo = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderColor: cores.bordasLinhas,
-        borderWidth:1,
-        borderRadius:5,
+        borderWidth: 1,
+        borderRadius: 5,
         padding: 10,
-        marginBottom:10,
+        marginBottom: 10,
     },
     txtLista: {
         color: cores.corTextoGeral,
@@ -108,44 +108,70 @@ const Estilo = StyleSheet.create({
     /* Modal Style */
     modalContainer: {
         backgroundColor: '#000',
-        flex:1,
+        flex: 1,
         opacity: 0.8,
-        justifyContent:'center',
+        justifyContent: 'center',
         alignItems: 'center',
     },
-    modalContent:{
-        elevation:5,
+    modalContent: {
+        elevation: 5,
         margin: 20,
-        backgroundColor:cores.fundoApp,
+        backgroundColor: cores.fundoApp,
         padding: 10,
         borderRadius: 5,
-        alignSelf:'stretch',
+        alignSelf: 'stretch',
     },
-    modalContainerTitulo:{
+    modalContainerTitulo: {
         flexDirection: 'row',
         borderBottomColor: cores.bordasLinhas,
         borderBottomWidth: 1,
-        padding:10,
-        justifyContent:'space-between',
-        marginBottom:10,
+        padding: 10,
+        justifyContent: 'space-between',
+        marginBottom: 10,
     },
-    modalTxtTitulo:{
+    modalTxtTitulo: {
         color: cores.corFontDestaque,
         fontWeight: 'bold',
     },
     modalBtnClose: {
-        backgroundColor:cores.primaria,
-        padding:0,
-        borderRadius:10,
-        width:20,
+        backgroundColor: cores.primaria,
+        padding: 0,
+        borderRadius: 10,
+        width: 20,
         height: 20,
-        alignItems:'center',
+        alignItems: 'center',
     },
     modalTxtBtnClose: {
         color: cores.corTextoGeral,
     },
 
-
+    /* Estilo das imagem dos pratos */
+    fotoPratoUpload: {
+        width: 200,
+        height: 200,
+        alignSelf: 'center',
+        marginBottom: 20,
+        borderRadius: 100,
+        borderWidth: 3,
+        borderColor: '#fff',
+        elevation:5,
+    },
+    fotoPratoEdit: {
+        width: 100,
+        height: 100,
+        alignSelf: 'center',
+        marginBottom: 10,
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: '#fff',
+    },
+    fotoPratoLista: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#fff',
+    },
 
 
 });

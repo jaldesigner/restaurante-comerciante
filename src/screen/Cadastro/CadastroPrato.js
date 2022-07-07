@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TextInput, Pressable, ScrollView, Alert, Modal, TouchableOpacity, ImageComponent, Platform } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Pressable, ScrollView, Alert, Modal, TouchableOpacity, ImageComponent, Platform, Image } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { Btn2, Card } from '../../components';
 import firestore from "@react-native-firebase/firestore";
@@ -36,26 +36,25 @@ export default function CadastroPrato() {
       } else if (response.errorCode) {
         console.log('Parece que houve um erro: ' + response.errorCode);
       } else {
-        uploadFileFirebase(response);
-        setImgPrato(response.uri);
+        const img = response.assets.map((i) => {
+          //console.log(i.uri);
+          setImgPrato(i.uri);
+          setAtualiza(1);
+        });
       }
     })
 
   }
 
-  const getFileLocalPath = response => {
-    const { path, uri } = response;
-    //console.log(response);
-    return Platform.OS === 'android' ? path : uri;
-  }
-
   const uploadFileFirebase = async response => {
     //const fileSource = getFileLocalPath(response);
-    const storageRef = storage().ref('imgPrato').child(uidPrato);
-    console.log(response.assets[0].uri);
-    return await storageRef.putFile(response.assets[0].uri);
+    const storageRef = storage().ref(INF().ID_APP + '/img-pratos').child(uidPrato);
+    return await storageRef.putFile(imgPrato);
   };
 
+  const buscaFoto = async () => {
+    const busca = storage().ref();
+  }
   useEffect(() => {
     const listaDePratos = async () => {
       const UID = (+new Date).toString(36);
@@ -134,6 +133,20 @@ export default function CadastroPrato() {
     }
   }
 
+  const FotoPrato = (props) => {
+    if (imgPrato === '' || imgPrato === null || imgPrato === undefined) {
+      return <View />
+    } else {
+      return (
+        <Image source={
+          {
+            uri: imgPrato,
+          }
+        } style={props.stl} />
+      );
+    }
+  }
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -164,12 +177,12 @@ export default function CadastroPrato() {
                   placeholderTextColor='#6C6D80' />
               </View>
               <View>
-                <Text style={Estilo.H3}>Imagem</Text>
-                <TextInput style={Estilo.boxInputText}
-                  value={inptImgEdit}
-                  onChangeText={inptImgEdit => setInptImgEdit(inptImgEdit)}
-                  placeholder="Imagem"
-                  placeholderTextColor='#6C6D80' />
+                
+                <View>
+                  <TouchableOpacity style={Estilo.boxInputFile} onPress={uploadFile} >
+                    <Text style={Estilo.H3}>Carregar imagem</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
               <View style={Estilo.boxNeutro}>
                 <Btn2 fncClique={() => {
@@ -197,18 +210,17 @@ export default function CadastroPrato() {
                 placeholderTextColor='#6C6D80' />
             </View>
             <View>
+              <FotoPrato stl={Estilo.fotoPratoUpload} />
+            </View>
+            <View>
               <TouchableOpacity style={Estilo.boxInputFile} onPress={uploadFile} >
                 <Text style={Estilo.H3}>Carregar imagem</Text>
               </TouchableOpacity>
-              {/* <TextInput style={Estilo.boxInputText}
-                value={imgPrato}
-                onChangeText={imgPrato => setImgPrato(imgPrato)}
-                placeholder="Imagem"
-                placeholderTextColor='#6C6D80' /> */}
             </View>
             <View style={Estilo.boxNeutro}>
               <Btn2 fncClique={() => {
                 CadastroDePrato(prato, imgPrato, uidPrato);
+                uploadFileFirebase();
                 setPrato('');
                 setImgPrato('');
                 setAtualiza(1);
