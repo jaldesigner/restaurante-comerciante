@@ -17,12 +17,14 @@ export const CadastroDePrato = async (nome_prato, url_img, UID) => {
 
 export const DeletaPrato = async (UIDPRATO) => {
     await pathDb.collection('Pratos').doc(UIDPRATO).delete().then(()=>{
-        alert('Prato deletado!')
+        alert('Prato deletado!' + UIDPRATO);
     });
 }
 
 export const EditaPrato = async (UIDPRATO,obj) => {
     await pathDb.collection('Pratos').doc(UIDPRATO).update(obj).then(()=>{
-        alert('Editado com sucesso!!')
+        alert('Nome do prato editado com sucesso!!');
+    }).catch(e=>{
+        alert(e);
     });
 }

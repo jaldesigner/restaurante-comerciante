@@ -56,7 +56,15 @@ const Estilo = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
     },
-
+    boxInputFile: {
+        borderWidth: 1,
+        borderColor: cores.bordasLinhas,
+        borderRadius: 7,
+        marginBottom: 20,
+        padding:10,
+        backgroundColor:'#4E5063',
+        alignItems:'center',
+    },
     boxNeutro: {
         marginTop: 10,
         marginBottom: 10,

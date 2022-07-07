@@ -1,7 +1,9 @@
-import { View, Text, SafeAreaView, TextInput, Pressable, ScrollView, Alert, Modal } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Pressable, ScrollView, Alert, Modal, TouchableOpacity, ImageComponent, Platform } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { Btn2, Card } from '../../components';
 import firestore from "@react-native-firebase/firestore";
+import storage from '@react-native-firebase/storage';
+import * as ImagePicker from 'react-native-image-picker';
 import { CadastroDePrato, DeletaPrato, EditaPrato } from '../../functions/cadastro_pratos';
 import Estilo from '../../Style/Estilo';
 import INF from '../../config/';
@@ -21,6 +23,38 @@ export default function CadastroPrato() {
   const [inptTxtEdit, setInptTxtEdit] = useState('');
   const [inptImgEdit, setInptImgEdit] = useState('');
   const [uidEdit, setUidEdit] = useState('');
+
+  const uploadFile = () => {
+    const opt = {
+      noData: true,
+      mediaType: 'photo'
+    };
+
+    ImagePicker.launchImageLibrary(opt, response => {
+      if (response.didCancel) {
+        console.log("Cancelou o modal");
+      } else if (response.errorCode) {
+        console.log('Parece que houve um erro: ' + response.errorCode);
+      } else {
+        uploadFileFirebase(response);
+        setImgPrato(response.uri);
+      }
+    })
+
+  }
+
+  const getFileLocalPath = response => {
+    const { path, uri } = response;
+    //console.log(response);
+    return Platform.OS === 'android' ? path : uri;
+  }
+
+  const uploadFileFirebase = async response => {
+    //const fileSource = getFileLocalPath(response);
+    const storageRef = storage().ref('imgPrato').child(uidPrato);
+    console.log(response.assets[0].uri);
+    return await storageRef.putFile(response.assets[0].uri);
+  };
 
   useEffect(() => {
     const listaDePratos = async () => {
@@ -58,54 +92,10 @@ export default function CadastroPrato() {
     );
   }
 
-  const EditarItem = () => {
-    return (
-      <View>
-        <Modal
-          animationType='slide'
-          visible={modalEdit}
-          transparent={true}
-          onRequestClose={() => {
-            setModalEdit(!modalEdit);
-          }}
-        >
-          <View style={Estilo.modalContainer}>
-            <View style={Estilo.modalContent}>
-              <View style={Estilo.modalContainerTitulo}>
-                <Text style={Estilo.modalTxtTitulo}>Editar Item</Text>
-                <Pressable style={Estilo.modalBtnClose} onPress={() => {
-                  setModalEdit(false);
-                }}><Text style={Estilo.modalTxtBtnClose}>X</Text></Pressable>
-              </View>
-              <View>
-                <Text style={Estilo.H3}>Nome do prato</Text>
-                <TextInput 
-                //autoFocus={true}
-                value={inptTxtEdit} 
-                onChangeText={inptTxtEdit => setInptTxtEdit(inptTxtEdit)}
-                style={Estilo.boxInputText}
-                  placeholder="Exp.: Bife com fritas"
-                  placeholderTextColor='#6C6D80' />
-              </View>
-              <View>
-                <Text style={Estilo.H3}>Imagem</Text>
-                <TextInput style={Estilo.boxInputText}
-                  value={imgPrato}
-                  onChangeText={imgPrato => setImgPrato(imgPrato)}
-                  placeholder="Imagem"
-                  placeholderTextColor='#6C6D80' />
-              </View>
-              <View style={Estilo.boxNeutro}>
-                <Btn2 fncClique={() => {
-                  alert(inptTxtEdit);
-                  //Clique pra salavar as alterações
-                }} txt='Salvar' />
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View>
-    );
+  const EditarItem = ({ edt }) => {
+    return (edt);
+    {/*  */ }
+
   }
 
   const ListaPratos = () => {
@@ -146,8 +136,58 @@ export default function CadastroPrato() {
 
   return (
     <SafeAreaView>
-      <ScrollView keyboardShouldPersistTaps='handled'>
-      <EditarItem />
+      <ScrollView>
+        <Modal
+          animationType='slide'
+          visible={modalEdit}
+          transparent={true}
+          onRequestClose={() => {
+            setModalEdit(!modalEdit);
+          }}
+        >
+          <View style={Estilo.modalContainer}>
+            <View style={Estilo.modalContent}>
+              <View style={Estilo.modalContainerTitulo}>
+                <Text style={Estilo.modalTxtTitulo}>Editar Item</Text>
+                <Pressable style={Estilo.modalBtnClose} onPress={() => {
+                  setModalEdit(false);
+                }}><Text style={Estilo.modalTxtBtnClose}>X</Text></Pressable>
+              </View>
+              <View>
+                <Text style={Estilo.H3}>Nome do prato</Text>
+                <TextInput
+                  //autoFocus={true}
+                  value={inptTxtEdit}
+                  onChangeText={inptTxtEdit => setInptTxtEdit(inptTxtEdit)}
+                  style={Estilo.boxInputText}
+                  placeholder="Exp.: Bife com fritas"
+                  placeholderTextColor='#6C6D80' />
+              </View>
+              <View>
+                <Text style={Estilo.H3}>Imagem</Text>
+                <TextInput style={Estilo.boxInputText}
+                  value={inptImgEdit}
+                  onChangeText={inptImgEdit => setInptImgEdit(inptImgEdit)}
+                  placeholder="Imagem"
+                  placeholderTextColor='#6C6D80' />
+              </View>
+              <View style={Estilo.boxNeutro}>
+                <Btn2 fncClique={() => {
+                  const obj = {
+                    nome_prato: inptTxtEdit,
+                    URL_IMG: inptImgEdit,
+                  };
+                  EditaPrato(uidEdit, obj);
+                  setInptTxtEdit('');
+                  setInptImgEdit('');
+                  setUidEdit('');
+                  setAtualiza(1);
+                  setModalEdit(!modalEdit);
+                }} txt='Salvar' />
+              </View>
+            </View>
+          </View>
+        </Modal>
         <Card titulo="Cad. Prato" >
           <View>
             <View>
@@ -157,12 +197,14 @@ export default function CadastroPrato() {
                 placeholderTextColor='#6C6D80' />
             </View>
             <View>
-              <Text style={Estilo.H3}>Imagem</Text>
-              <TextInput style={Estilo.boxInputText}
+              <TouchableOpacity style={Estilo.boxInputFile} onPress={uploadFile} >
+                <Text style={Estilo.H3}>Carregar imagem</Text>
+              </TouchableOpacity>
+              {/* <TextInput style={Estilo.boxInputText}
                 value={imgPrato}
                 onChangeText={imgPrato => setImgPrato(imgPrato)}
                 placeholder="Imagem"
-                placeholderTextColor='#6C6D80' />
+                placeholderTextColor='#6C6D80' /> */}
             </View>
             <View style={Estilo.boxNeutro}>
               <Btn2 fncClique={() => {
