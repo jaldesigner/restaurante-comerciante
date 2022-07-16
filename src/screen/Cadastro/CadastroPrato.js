@@ -2,11 +2,13 @@ import { View, Text, SafeAreaView, TextInput, Pressable, ScrollView, Alert, Moda
 import React, { useState, useEffect, useRef } from 'react';
 import { Btn2, Card } from '../../components';
 import firestore from "@react-native-firebase/firestore";
+import { utils } from "@react-native-firebase/app";
 import storage from '@react-native-firebase/storage';
 import * as ImagePicker from 'react-native-image-picker';
 import { CadastroDePrato, DeletaPrato, EditaPrato } from '../../functions/cadastro_pratos';
 import Estilo from '../../Style/Estilo';
 import INF from '../../config/';
+import { set } from 'date-fns';
 
 const pathDb = firestore().collection('Restaurante').doc(INF().ID_APP);
 
@@ -15,8 +17,10 @@ export default function CadastroPrato() {
   const [uidPrato, setUidPrato] = useState('');
   const [prato, setPrato] = useState('');
   const [imgPrato, setImgPrato] = useState('');
+  const [ext, setExt] = useState('');
   const [listaPratos, setListaPratos] = useState('');
   const [atualiza, setAtualiza] = useState(0);
+  const [url, setUrl] = useState(null);
 
   //Update
   const [modalEdit, setModalEdit] = useState(false);
@@ -35,9 +39,16 @@ export default function CadastroPrato() {
         console.log("Cancelou o modal");
       } else if (response.errorCode) {
         console.log('Parece que houve um erro: ' + response.errorCode);
-      } else {
+      }
+      else {
+        //console.log();
         const img = response.assets.map((i) => {
-          //console.log(i.uri);
+
+          let fn = i.fileName;
+          let reg = /[.]/g;
+          let numSc = fn.search(reg);
+          let ext = fn.substring(numSc);
+          setExt(ext);
           setImgPrato(i.uri);
           setAtualiza(1);
         });
@@ -47,14 +58,15 @@ export default function CadastroPrato() {
   }
 
   const uploadFileFirebase = async response => {
-    //const fileSource = getFileLocalPath(response);
-    const storageRef = storage().ref(INF().ID_APP + '/img-pratos').child(uidPrato);
-    return await storageRef.putFile(imgPrato);
+    if (imgPrato === '' || imgPrato === undefined || imgPrato === null) {
+      setImgPrato(null);
+    } else {
+      //const fileSource = getFileLocalPath(response);
+      const storageRef = storage().ref(INF().ID_APP + '/img-pratos').child(uidPrato + ext);
+      return await storageRef.putFile(imgPrato);
+    }
   };
 
-  const buscaFoto = async () => {
-    const busca = storage().ref();
-  }
   useEffect(() => {
     const listaDePratos = async () => {
       const UID = (+new Date).toString(36);
@@ -70,14 +82,24 @@ export default function CadastroPrato() {
 
   }, [atualiza]);
 
-  const AlertaDelete = (item, idItem) => {
+  const deletaFoto = async (img) =>{
+    let imgRef = storage().ref(INF().ID_APP + '/img-pratos/').child(img);
+    await imgRef.delete().then(()=>{
+      setAtualiza(1)
+    }).catch(e=>{
+      alert(e);
+    })
+  }
+
+  const AlertaDelete = (item, idItem, img) => {
     Alert.alert(
       "Atenção!",
-      "Deseja Excluir o Item " + '"' + item + '"',
+      "Deseja Excluir o Item " + '"' + img + '"',
       [
         {
           text: "Sim",
           onPress: () => {
+            deletaFoto(img);
             DeletaPrato(idItem);
             setAtualiza(1);
           }
@@ -93,7 +115,7 @@ export default function CadastroPrato() {
 
   const EditarItem = ({ edt }) => {
     return (edt);
-    {/*  */ }
+    {/* */ }
 
   }
 
@@ -104,8 +126,25 @@ export default function CadastroPrato() {
       const lPratos = listaPratos.map((i, index) => {
         const nPrato = i.data().nome_prato;
         const idPrato = i.data().UID;
+        const img = i.data().URL_IMG;
+        const [foto, setFoto] = useState(null);
+
+        const BuscaFoto = async (imagem) => {
+          try {
+            const urlF = await storage().ref(INF().ID_APP + '/img-pratos/' + imagem).getDownloadURL();
+            setFoto(urlF);
+          } catch (e) {
+            return null;
+            //console.log(e);
+          }
+        }
+
+        BuscaFoto(i.data().URL_IMG);
         return (
           <View style={Estilo.linhaLista} key={index}>
+            <View>
+              <Image source={{ uri: foto }} style={{ width: 50, height: 50 , borderRadius:25}} />
+            </View>
             <View style={Estilo.boxTextoLista}>
               <Text style={Estilo.txtLista}>{i.data().nome_prato}</Text>
             </View>
@@ -114,13 +153,12 @@ export default function CadastroPrato() {
                 setInptTxtEdit(i.data().nome_prato);
                 setInptImgEdit(i.data().URL_IMG);
                 setUidEdit(i.data().UID);
-
                 setModalEdit(!modalEdit)
               }} style={Estilo.btnLista}>
                 <Text style={Estilo.txtLinkPositivo}>Edit</Text>
               </Pressable>
               <Pressable onPress={() => {
-                AlertaDelete(nPrato, idPrato);
+                AlertaDelete(nPrato, idPrato , img);
               }} style={Estilo.btnLista}>
                 <Text style={Estilo.txtLinkNegativo}>Del</Text>
               </Pressable>
@@ -177,7 +215,7 @@ export default function CadastroPrato() {
                   placeholderTextColor='#6C6D80' />
               </View>
               <View>
-                
+
                 <View>
                   <TouchableOpacity style={Estilo.boxInputFile} onPress={uploadFile} >
                     <Text style={Estilo.H3}>Carregar imagem</Text>
@@ -201,7 +239,7 @@ export default function CadastroPrato() {
             </View>
           </View>
         </Modal>
-        <Card titulo="Cad. Prato" >
+        <Card titulo="Cadastro de Prato" >
           <View>
             <View>
               <Text style={Estilo.H3}>Nome do prato</Text>
@@ -219,11 +257,23 @@ export default function CadastroPrato() {
             </View>
             <View style={Estilo.boxNeutro}>
               <Btn2 fncClique={() => {
-                CadastroDePrato(prato, imgPrato, uidPrato);
-                uploadFileFirebase();
-                setPrato('');
-                setImgPrato('');
-                setAtualiza(1);
+
+                const Cad = () => {
+                  let inptTCount = prato.length;
+                  if (inptTCount <= 3) {
+                    alert("O nome do prato deve ter 3 ou mais digito!");
+                  } else {
+                    uploadFileFirebase();
+                    let imgP = uidPrato + ext;
+                    CadastroDePrato(prato, imgP, uidPrato);
+                    setPrato('');
+                    setImgPrato('');
+                    setAtualiza(1);
+                  }
+                }
+
+                Cad();
+
               }} txt='Cadastrar' />
             </View>
           </View>

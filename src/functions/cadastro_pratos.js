@@ -10,9 +10,10 @@ export const CadastroDePrato = async (nome_prato, url_img, UID) => {
         UID: UID,
         nome_prato: nome_prato,
         URL_IMG: url_img,
-    }).catch((error) => {
+    }
+    ).catch((error) => {
         alert(error);
-    })
+    });
 }
 
 export const DeletaPrato = async (UIDPRATO) => {
