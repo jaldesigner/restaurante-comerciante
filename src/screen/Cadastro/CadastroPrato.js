@@ -66,20 +66,12 @@ export default function CadastroPrato() {
 
     ImagePicker.launchImageLibrary(opt, response => {
       if (response.didCancel) {
-        setImgPrato('');
+        setInptImgEdit('');
       } else if (response.errorCode) {
-        console.log('Parece que houve um erro: ' + response.errorCode);
+        alert('Parece que houve um erro: ' + response.errorCode);
       }
       else {
-        //console.log();
         const img = response.assets.map((i) => {
-
-         /*  let fn = i.fileName;
-          let reg = /[.]/g;
-          let numSc = fn.search(reg);
-          let ext = fn.substring(numSc);
-          setExt(ext); */
-          //console.log(i.uri);
           setInptImgEdit(i.uri);
           setAtualiza(1);
         });
@@ -177,7 +169,6 @@ export default function CadastroPrato() {
             setFoto(urlF);
           } catch (e) {
             return null;
-            //console.log(e);
           }
         }
 
@@ -258,7 +249,8 @@ export default function CadastroPrato() {
                   onChangeText={inptTxtEdit => setInptTxtEdit(inptTxtEdit)}
                   style={Estilo.boxInputText}
                   placeholder="Exp.: Bife com fritas"
-                  placeholderTextColor='#6C6D80' />
+                  placeholderTextColor='#6C6D80'
+                  />
               </View>
               <View>
                 <View style={{ alignItems: 'center' }}>

@@ -55,6 +55,7 @@ const Estilo = StyleSheet.create({
         marginBottom: 20,
         paddingLeft: 10,
         paddingRight: 10,
+        color: cores.corTextoGeral,
     },
     boxInputFile: {
         borderWidth: 1,
