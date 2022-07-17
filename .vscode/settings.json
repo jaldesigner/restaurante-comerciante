@@ -1,0 +1,4 @@
+{
+    "emulator.emulatorPathLinux": "~/Android/Sdk/emulator",
+    "emulator.emulatorPath": "~/Android/sdk/emulator"
+}

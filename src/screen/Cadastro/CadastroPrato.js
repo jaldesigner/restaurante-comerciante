@@ -94,7 +94,7 @@ export default function CadastroPrato() {
   const AlertaDelete = (item, idItem, img) => {
     Alert.alert(
       "Atenção!",
-      "Deseja Excluir o Item " + '"' + img + '"',
+      "Deseja Excluir o Item " + '"' + item + '"',
       [
         {
           text: "Sim",
