@@ -1,5 +1,3 @@
-import { View, Text } from 'react-native';
-import React, { useState } from 'react';
 import firestore from "@react-native-firebase/firestore";
 import INF from '../config/index';
 

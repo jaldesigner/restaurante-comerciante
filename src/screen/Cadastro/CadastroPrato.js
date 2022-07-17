@@ -26,6 +26,7 @@ export default function CadastroPrato() {
   const [modalEdit, setModalEdit] = useState(false);
   const [inptTxtEdit, setInptTxtEdit] = useState('');
   const [inptImgEdit, setInptImgEdit] = useState('');
+  const [inptImgEditUrl, setInptImgEditUrl] = useState('');
   const [uidEdit, setUidEdit] = useState('');
 
   const uploadFile = () => {
@@ -36,7 +37,7 @@ export default function CadastroPrato() {
 
     ImagePicker.launchImageLibrary(opt, response => {
       if (response.didCancel) {
-        console.log("Cancelou o modal");
+        setImgPrato('');
       } else if (response.errorCode) {
         console.log('Parece que houve um erro: ' + response.errorCode);
       }
@@ -57,6 +58,36 @@ export default function CadastroPrato() {
 
   }
 
+  const editFile = () => {
+    const opt = {
+      noData: true,
+      mediaType: 'photo'
+    };
+
+    ImagePicker.launchImageLibrary(opt, response => {
+      if (response.didCancel) {
+        setImgPrato('');
+      } else if (response.errorCode) {
+        console.log('Parece que houve um erro: ' + response.errorCode);
+      }
+      else {
+        //console.log();
+        const img = response.assets.map((i) => {
+
+         /*  let fn = i.fileName;
+          let reg = /[.]/g;
+          let numSc = fn.search(reg);
+          let ext = fn.substring(numSc);
+          setExt(ext); */
+          //console.log(i.uri);
+          setInptImgEdit(i.uri);
+          setAtualiza(1);
+        });
+      }
+    })
+
+  }
+
   const uploadFileFirebase = async response => {
     if (imgPrato === '' || imgPrato === undefined || imgPrato === null) {
       setImgPrato(null);
@@ -64,6 +95,17 @@ export default function CadastroPrato() {
       //const fileSource = getFileLocalPath(response);
       const storageRef = storage().ref(INF().ID_APP + '/img-pratos').child(uidPrato + ext);
       return await storageRef.putFile(imgPrato);
+    }
+  };
+
+  const editFotoFirebase = async (nomeFoto) => {
+    if (inptImgEdit === '' || inptImgEdit === undefined || inptImgEdit === null) {
+      setImgPrato(null);
+    } else {
+    
+      //const fileSource = getFileLocalPath(response);
+      const storageRef = storage().ref(INF().ID_APP + '/img-pratos').child(nomeFoto);
+      return await storageRef.putFile(inptImgEdit);
     }
   };
 
@@ -82,11 +124,11 @@ export default function CadastroPrato() {
 
   }, [atualiza]);
 
-  const deletaFoto = async (img) =>{
+  const deletaFoto = async (img) => {
     let imgRef = storage().ref(INF().ID_APP + '/img-pratos/').child(img);
-    await imgRef.delete().then(()=>{
+    await imgRef.delete().then(() => {
       setAtualiza(1)
-    }).catch(e=>{
+    }).catch(e => {
       alert(e);
     })
   }
@@ -140,28 +182,30 @@ export default function CadastroPrato() {
         }
 
         BuscaFoto(i.data().URL_IMG);
+
         return (
           <View style={Estilo.linhaLista} key={index}>
             <View>
-              <Image source={{ uri: foto }} style={{ width: 50, height: 50 , borderRadius:25}} />
+              <Image source={{ uri: foto }} style={{ width: 50, height: 50, borderRadius: 25 }} />
             </View>
             <View style={Estilo.boxTextoLista}>
               <Text style={Estilo.txtLista}>{i.data().nome_prato}</Text>
             </View>
             <View style={Estilo.boxBotaoLista}>
-              <Pressable onPress={() => {
+              <TouchableOpacity onPress={() => {
                 setInptTxtEdit(i.data().nome_prato);
-                setInptImgEdit(i.data().URL_IMG);
+                setInptImgEditUrl(i.data().URL_IMG);
                 setUidEdit(i.data().UID);
+                setUrl(foto);
                 setModalEdit(!modalEdit)
               }} style={Estilo.btnLista}>
                 <Text style={Estilo.txtLinkPositivo}>Edit</Text>
-              </Pressable>
-              <Pressable onPress={() => {
-                AlertaDelete(nPrato, idPrato , img);
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                AlertaDelete(nPrato, idPrato, img);
               }} style={Estilo.btnLista}>
                 <Text style={Estilo.txtLinkNegativo}>Del</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -184,7 +228,7 @@ export default function CadastroPrato() {
       );
     }
   }
-
+//console.log(url);
   return (
     <SafeAreaView>
       <ScrollView>
@@ -200,9 +244,11 @@ export default function CadastroPrato() {
             <View style={Estilo.modalContent}>
               <View style={Estilo.modalContainerTitulo}>
                 <Text style={Estilo.modalTxtTitulo}>Editar Item</Text>
-                <Pressable style={Estilo.modalBtnClose} onPress={() => {
+                <TouchableOpacity style={Estilo.modalBtnClose} onPress={() => {
+                  setInptImgEdit('');
                   setModalEdit(false);
-                }}><Text style={Estilo.modalTxtBtnClose}>X</Text></Pressable>
+                }}><Text style={Estilo.modalTxtBtnClose}>X</Text>
+                </TouchableOpacity>
               </View>
               <View>
                 <Text style={Estilo.H3}>Nome do prato</Text>
@@ -215,9 +261,18 @@ export default function CadastroPrato() {
                   placeholderTextColor='#6C6D80' />
               </View>
               <View>
-
+                <View style={{ alignItems: 'center' }}>
+                  <Image source={{ uri: inptImgEdit == '' ? url : inptImgEdit }} style={{
+                    width: 90,
+                    height: 90,
+                    borderRadius: 45,
+                    borderWidth: 2,
+                    borderColor: '#6C6D80',
+                    marginBottom: 20,
+                  }} />
+                </View>
                 <View>
-                  <TouchableOpacity style={Estilo.boxInputFile} onPress={uploadFile} >
+                  <TouchableOpacity style={Estilo.boxInputFile} onPress={editFile} >
                     <Text style={Estilo.H3}>Carregar imagem</Text>
                   </TouchableOpacity>
                 </View>
@@ -226,9 +281,9 @@ export default function CadastroPrato() {
                 <Btn2 fncClique={() => {
                   const obj = {
                     nome_prato: inptTxtEdit,
-                    URL_IMG: inptImgEdit,
                   };
                   EditaPrato(uidEdit, obj);
+                  editFotoFirebase(inptImgEditUrl);
                   setInptTxtEdit('');
                   setInptImgEdit('');
                   setUidEdit('');
