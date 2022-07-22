@@ -9,7 +9,7 @@ import MontarCardapio from '../screen/MontarCardapio';
 import Cadastro from '../screen/Cadastro';
 import CadastroPrato from '../screen/Cadastro/CadastroPrato';
 import CadastroAcompanhamento from '../screen/Cadastro/CadastroAcompanhamento';
-import CadastroValres from '../screen/Cadastro/CadastroValres';
+import CadastroValores from '../screen/Cadastro/CadastroValores';
 import CadastroMedidas from '../screen/Cadastro/CadastroMedidas';
 
 
@@ -19,7 +19,7 @@ export default function AppRouter() {
 
   return (
 
-    <RouterStack.Navigator initialRouteName="CadastroPrato">
+    <RouterStack.Navigator initialRouteName="CadastroAcompanhamento">
       <RouterStack.Screen name='Home' component={Home} options={{ headerTransparent: false, headerShown: false }} />
       <RouterStack.Screen name='MontarCardapio' component={MontarCardapio} options={{ headerTransparent: true, headerShown: false }} />
 
@@ -27,7 +27,7 @@ export default function AppRouter() {
       <RouterStack.Screen name='Cadastro' component={Cadastro} options={{ headerTransparent: true, headerShown: false }} />
       <RouterStack.Screen name='CadastroPrato' component={CadastroPrato} options={{ headerTransparent: true, headerShown: false }} />
       <RouterStack.Screen name='CadastroAcompanhamento' component={CadastroAcompanhamento} options={{ headerTransparent: true, headerShown: false }} />
-      <RouterStack.Screen name='CadastroValres' component={CadastroValres} options={{ headerTransparent: true, headerShown: false }} />
+      <RouterStack.Screen name='CadastroValores' component={CadastroValores} options={{ headerTransparent: true, headerShown: false }} />
       <RouterStack.Screen name='CadastroMedidas' component={CadastroMedidas} options={{ headerTransparent: true, headerShown: false }} />
     </RouterStack.Navigator>
 

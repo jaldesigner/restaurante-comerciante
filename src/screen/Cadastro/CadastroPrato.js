@@ -1,14 +1,12 @@
-import { View, Text, SafeAreaView, TextInput, Pressable, ScrollView, Alert, Modal, TouchableOpacity, ImageComponent, Platform, Image } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, SafeAreaView, TextInput, ScrollView, Alert, Modal, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { Btn2, Card } from '../../components';
 import firestore from "@react-native-firebase/firestore";
-import { utils } from "@react-native-firebase/app";
 import storage from '@react-native-firebase/storage';
 import * as ImagePicker from 'react-native-image-picker';
-import { CadastroDePrato, DeletaPrato, EditaPrato } from '../../functions/cadastro_pratos';
+import { CadastroDePrato, DeletaPrato, EditaPrato } from '../../functions/cadastroGeral';
 import Estilo from '../../Style/Estilo';
 import INF from '../../config/';
-import { set } from 'date-fns';
 
 const pathDb = firestore().collection('Restaurante').doc(INF().ID_APP);
 
