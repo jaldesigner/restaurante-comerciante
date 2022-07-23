@@ -2,110 +2,50 @@ import { View, Text, SafeAreaView, TextInput, ScrollView, Alert, Modal, Touchabl
 import React, { useState, useEffect } from 'react';
 import { Btn2, Card } from '../../components';
 import firestore from "@react-native-firebase/firestore";
-import storage from '@react-native-firebase/storage';
-import * as ImagePicker from 'react-native-image-picker';
-import { CadastroDePrato, DeletaPrato, EditaPrato } from '../../functions/cadastroGeral';
+import { Adicionar, Deletar, Atualizar } from '../../functions/cadastroGeral';
 import Estilo from '../../Style/Estilo';
 import INF from '../../config/';
 
 const pathDb = firestore().collection('Restaurante').doc(INF().ID_APP);
 
 export default function CadastroAcompanhamento() {
-  const [uidPrato, setUidPrato] = useState('');
-  const [prato, setPrato] = useState('');
-  const [imgPrato, setImgPrato] = useState('');
-  const [ext, setExt] = useState('');
-  const [listaPratos, setListaPratos] = useState('');
+
+  const [acompanhamento, setAcompanhamento] = useState('');
+  const [listaAcompanhamento, setListaAcompanhamento] = useState('');
   const [atualiza, setAtualiza] = useState(0);
-  const [url, setUrl] = useState(null);
+  const [uniId, setUniId] = useState('');
+  const [uid, setUid] = useState('');
 
   //Update
   const [modalEdit, setModalEdit] = useState(false);
   const [inptTxtEdit, setInptTxtEdit] = useState('');
-  const [inptImgEdit, setInptImgEdit] = useState('');
-  const [inptImgEditUrl, setInptImgEditUrl] = useState('');
   const [uidEdit, setUidEdit] = useState('');
 
-  const uploadFile = () => {
-    const opt = {
-      noData: true,
-      mediaType: 'photo'
+  //Adicionar('Acompanhamento',uniId,obj,"Adicionado com sucesso!");
+  //Deletar('Acompanhamento',uniId,'Deletado com sucesso!');
+  //Atualizar( 'Acompanhamento',uniId,obj,'Atualizado com sucesso!');
+
+  const CadAcompanhamento = () => {
+    let obj = {
+      UID: uniId,
+      acompanhamento: acompanhamento,
     };
-
-    ImagePicker.launchImageLibrary(opt, response => {
-      if (response.didCancel) {
-        setImgPrato('');
-      } else if (response.errorCode) {
-        console.log('Parece que houve um erro: ' + response.errorCode);
-      }
-      else {
-        //console.log();
-        const img = response.assets.map((i) => {
-
-          let fn = i.fileName;
-          let reg = /[.]/g;
-          let numSc = fn.search(reg);
-          let ext = fn.substring(numSc);
-          setExt(ext);
-          setImgPrato(i.uri);
-          setAtualiza(1);
-        });
-      }
-    })
-
-  }
-
-  const editFile = () => {
-    const opt = {
-      noData: true,
-      mediaType: 'photo'
-    };
-
-    ImagePicker.launchImageLibrary(opt, response => {
-      if (response.didCancel) {
-        setInptImgEdit('');
-      } else if (response.errorCode) {
-        alert('Parece que houve um erro: ' + response.errorCode);
-      }
-      else {
-        const img = response.assets.map((i) => {
-          setInptImgEdit(i.uri);
-          setAtualiza(1);
-        });
-      }
-    })
-
-  }
-
-  const uploadFileFirebase = async response => {
-    if (imgPrato === '' || imgPrato === undefined || imgPrato === null) {
-      setImgPrato(null);
+    if (acompanhamento == '' || acompanhamento.length < 3) {
+      alert('O acompanhamento deve ter mais de 3 digitos!');
     } else {
-      //const fileSource = getFileLocalPath(response);
-      const storageRef = storage().ref(INF().ID_APP + '/img-pratos').child(uidPrato + ext);
-      return await storageRef.putFile(imgPrato);
-    }
-  };
-
-  const editFotoFirebase = async (nomeFoto) => {
-    if (inptImgEdit === '' || inptImgEdit === undefined || inptImgEdit === null) {
-      setImgPrato(null);
-    } else {
-
-      //const fileSource = getFileLocalPath(response);
-      const storageRef = storage().ref(INF().ID_APP + '/img-pratos').child(nomeFoto);
-      return await storageRef.putFile(inptImgEdit);
+      Adicionar('Acompanhamento', uniId, obj, 'Adicionado com sucesso!');
+      setAcompanhamento('');
+      setAtualiza(1);
     }
   };
 
   useEffect(() => {
     const listaDePratos = async () => {
       const UID = (+new Date).toString(36);
+      setUniId(UID);
 
-      const lista = await pathDb.collection('Pratos').orderBy('nome_prato').get();
-
-      setUidPrato(UID);
-      setListaPratos(lista.docs);
+      const lista = await pathDb.collection('Acompanhamento').orderBy('acompanhamento').get();
+      setListaAcompanhamento(lista.docs);
       setAtualiza(0);
     }
 
@@ -113,16 +53,7 @@ export default function CadastroAcompanhamento() {
 
   }, [atualiza]);
 
-  const deletaFoto = async (img) => {
-    let imgRef = storage().ref(INF().ID_APP + '/img-pratos/').child(img);
-    await imgRef.delete().then(() => {
-      setAtualiza(1)
-    }).catch(e => {
-      alert(e);
-    })
-  }
-
-  const AlertaDelete = (item, idItem, img) => {
+  const AlertaDelete = (item, idItem) => {
     Alert.alert(
       "Atenção!",
       "Deseja Excluir o Item " + '"' + item + '"',
@@ -130,8 +61,8 @@ export default function CadastroAcompanhamento() {
         {
           text: "Sim",
           onPress: () => {
-            deletaFoto(img);
-            DeletaPrato(idItem);
+            Deletar('Acompanhamento', idItem, 'Item deletado com sucesso!');
+            setUniId('');
             setAtualiza(1);
           }
         },
@@ -144,53 +75,34 @@ export default function CadastroAcompanhamento() {
     );
   }
 
-  const EditarItem = ({ edt }) => {
-    return (edt);
-    {/* */ }
-
-  }
-
   const ListaPratos = () => {
-    if (listaPratos.length === 0 || listaPratos.length === undefined) {
-      return (<Text>Não há acompanhamento Cadastrado</Text>);
+    if (listaAcompanhamento.length === 0 || listaAcompanhamento.length === undefined) {
+      return (
+        <View style={Estilo.ItemCenter}>
+          <Text style={Estilo.TxtComum}>Não há acompanhamento Cadastrado</Text>
+        </View>
+      );
     } else {
-      const lPratos = listaPratos.map((i, index) => {
-        const nPrato = i.data().nome_prato;
-        const idPrato = i.data().UID;
+      const lPratos = listaAcompanhamento.map((i, index) => {
+        const acompanhamento = i.data().acompanhamento;
+        const idAcompanhamento = i.data().UID;
         const img = i.data().URL_IMG;
-        const [foto, setFoto] = useState(null);
-
-        const BuscaFoto = async (imagem) => {
-          try {
-            const urlF = await storage().ref(INF().ID_APP + '/img-pratos/' + imagem).getDownloadURL();
-            setFoto(urlF);
-          } catch (e) {
-            return null;
-          }
-        }
-
-        BuscaFoto(i.data().URL_IMG);
 
         return (
           <View style={Estilo.linhaLista} key={index}>
-            <View>
-              <Image source={{ uri: foto }} style={{ width: 50, height: 50, borderRadius: 25 }} />
-            </View>
+
             <View style={Estilo.boxTextoLista}>
-              <Text style={Estilo.txtLista}>{i.data().nome_prato}</Text>
+              <Text style={Estilo.txtLista}>{acompanhamento}</Text>
             </View>
             <View style={Estilo.boxBotaoLista}>
               <TouchableOpacity onPress={() => {
                 setInptTxtEdit(i.data().nome_prato);
-                setInptImgEditUrl(i.data().URL_IMG);
-                setUidEdit(i.data().UID);
-                setUrl(foto);
                 setModalEdit(!modalEdit)
               }} style={Estilo.btnLista}>
                 <Text style={Estilo.txtLinkPositivo}>Edit</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-                AlertaDelete(nPrato, idPrato, img);
+                AlertaDelete(acompanhamento, idAcompanhamento);
               }} style={Estilo.btnLista}>
                 <Text style={Estilo.txtLinkNegativo}>Del</Text>
               </TouchableOpacity>
@@ -203,20 +115,6 @@ export default function CadastroAcompanhamento() {
     }
   }
 
-  const FotoPrato = (props) => {
-    if (imgPrato === '' || imgPrato === null || imgPrato === undefined) {
-      return <View />
-    } else {
-      return (
-        <Image source={
-          {
-            uri: imgPrato,
-          }
-        } style={props.stl} />
-      );
-    }
-  }
-  //console.log(url);
   return (
     <SafeAreaView>
       <ScrollView>
@@ -227,13 +125,12 @@ export default function CadastroAcompanhamento() {
           onRequestClose={() => {
             setModalEdit(!modalEdit);
           }}
-          >
+        >
           <View style={Estilo.modalContainer}>
             <View style={Estilo.modalContent}>
               <View style={Estilo.modalContainerTitulo}>
                 <Text style={Estilo.modalTxtTitulo}>Editar Item</Text>
                 <TouchableOpacity style={Estilo.modalBtnClose} onPress={() => {
-                  setInptImgEdit('');
                   setModalEdit(false);
                 }}><Text style={Estilo.modalTxtBtnClose}>X</Text>
                 </TouchableOpacity>
@@ -250,27 +147,14 @@ export default function CadastroAcompanhamento() {
                 />
               </View>
               <View>
-                <View style={{ alignItems: 'center' }}>
-                  <Image source={{ uri: inptImgEdit == '' ? url : inptImgEdit }} style={{
-                    width: 90,
-                    height: 90,
-                    borderRadius: 45,
-                    borderWidth: 2,
-                    borderColor: '#6C6D80',
-                    marginBottom: 20,
-                  }} />
-                </View>
+
               </View>
               <View style={Estilo.boxNeutro}>
                 <Btn2 fncClique={() => {
                   const obj = {
                     nome_prato: inptTxtEdit,
                   };
-                  EditaPrato(uidEdit, obj);
-                  editFotoFirebase(inptImgEditUrl);
                   setInptTxtEdit('');
-                  setInptImgEdit('');
-                  setUidEdit('');
                   setAtualiza(1);
                   setModalEdit(!modalEdit);
                 }} txt='Salvar' />
@@ -281,36 +165,16 @@ export default function CadastroAcompanhamento() {
         <Card titulo="Cadastro de Acompanhamento" >
           <View>
             <View>
-              <View style={{marginBottom:10}}>
+              <View style={{ marginBottom: 10 }}>
                 <Text style={Estilo.H3}>Acompanhamento</Text>
               </View>
-              <TextInput value={prato} onChangeText={prato => setPrato(prato)} style={Estilo.boxInputText}
+              <TextInput value={acompanhamento} onChangeText={acompanhamento => setAcompanhamento(acompanhamento)} style={Estilo.boxInputText}
                 placeholder="Exp.: Arroz, feijão, batata corada"
                 placeholderTextColor='#6C6D80' />
             </View>
-            <View>
-              <FotoPrato stl={Estilo.fotoPratoUpload} />
-            </View>
+
             <View style={Estilo.boxNeutro}>
-              <Btn2 fncClique={() => {
-
-                const Cad = () => {
-                  let inptTCount = prato.length;
-                  if (inptTCount <= 3) {
-                    alert("");
-                  } else {
-                    uploadFileFirebase();
-                    let imgP = uidPrato + ext;
-                    CadastroDePrato(prato, imgP, uidPrato);
-                    setPrato('');
-                    setImgPrato('');
-                    setAtualiza(1);
-                  }
-                }
-
-                Cad();
-
-              }} txt='Cadastrar' />
+              <Btn2 fncClique={CadAcompanhamento} txt='Cadastrar' />
             </View>
           </View>
         </Card>

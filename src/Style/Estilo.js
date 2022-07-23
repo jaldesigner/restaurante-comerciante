@@ -98,7 +98,9 @@ const Estilo = StyleSheet.create({
     boxBotaoLista: {
         flexDirection: 'row',
     },
-    boxTextoLista: {},
+    boxTextoLista: {
+        flexWrap: 'wrap',
+    },
     btnLista: {
         alignItems: 'flex-end',
         marginLeft: 10,
