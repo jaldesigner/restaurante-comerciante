@@ -14,7 +14,6 @@ export default function CadastroAcompanhamento() {
   const [listaAcompanhamento, setListaAcompanhamento] = useState('');
   const [atualiza, setAtualiza] = useState(0);
   const [uniId, setUniId] = useState('');
-  const [uid, setUid] = useState('');
 
   //Update
   const [modalEdit, setModalEdit] = useState(false);
@@ -86,7 +85,6 @@ export default function CadastroAcompanhamento() {
       const lPratos = listaAcompanhamento.map((i, index) => {
         const acompanhamento = i.data().acompanhamento;
         const idAcompanhamento = i.data().UID;
-        const img = i.data().URL_IMG;
 
         return (
           <View style={Estilo.linhaLista} key={index}>
@@ -96,7 +94,8 @@ export default function CadastroAcompanhamento() {
             </View>
             <View style={Estilo.boxBotaoLista}>
               <TouchableOpacity onPress={() => {
-                setInptTxtEdit(i.data().nome_prato);
+                setInptTxtEdit(i.data().acompanhamento);
+                setUidEdit(idAcompanhamento);
                 setModalEdit(!modalEdit)
               }} style={Estilo.btnLista}>
                 <Text style={Estilo.txtLinkPositivo}>Edit</Text>
@@ -152,10 +151,13 @@ export default function CadastroAcompanhamento() {
               <View style={Estilo.boxNeutro}>
                 <Btn2 fncClique={() => {
                   const obj = {
-                    nome_prato: inptTxtEdit,
+                    acompanhamento: inptTxtEdit,
                   };
+                  alert(uidEdit);
+                  Atualizar('Acompanhamento',uidEdit,obj,'Item Atualizado com sucesso!');
                   setInptTxtEdit('');
-                  setAtualiza(1);
+                  setUidEdit('');
+                  setAtualiza(1); 
                   setModalEdit(!modalEdit);
                 }} txt='Salvar' />
               </View>
@@ -168,7 +170,9 @@ export default function CadastroAcompanhamento() {
               <View style={{ marginBottom: 10 }}>
                 <Text style={Estilo.H3}>Acompanhamento</Text>
               </View>
-              <TextInput value={acompanhamento} onChangeText={acompanhamento => setAcompanhamento(acompanhamento)} style={Estilo.boxInputText}
+              <TextInput value={acompanhamento} onChangeText={acompanhamento =>
+                setAcompanhamento(acompanhamento)}
+                style={Estilo.boxInputText}
                 placeholder="Exp.: Arroz, feijão, batata corada"
                 placeholderTextColor='#6C6D80' />
             </View>

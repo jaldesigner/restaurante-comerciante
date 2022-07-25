@@ -96,16 +96,18 @@ const Estilo = StyleSheet.create({
         textDecorationLine: 'underline',
     },
     boxBotaoLista: {
-        flexDirection: 'row',
+        alignItems:'center',
+        width:'30%',
+        justifyContent:'space-between',
+        flexDirection:'row'
     },
     boxTextoLista: {
+        width: '70%',
         flexWrap: 'wrap',
+        alignItems:'flex-start',
     },
     btnLista: {
-        alignItems: 'flex-end',
-        marginLeft: 10,
-        paddingLeft: 10,
-        marginRight: 10,
+        padding: '10%',
     },
 
     /* Modal Style */
