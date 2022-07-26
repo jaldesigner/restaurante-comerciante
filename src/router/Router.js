@@ -6,12 +6,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //import das telas
 import Home from '../screen/Home';
 import MontarCardapio from '../screen/MontarCardapio';
+
 import Cadastro from '../screen/Cadastro';
 import CadastroPrato from '../screen/Cadastro/CadastroPrato';
 import CadastroAcompanhamento from '../screen/Cadastro/CadastroAcompanhamento';
 import CadastroValores from '../screen/Cadastro/CadastroValores';
 import CadastroMedidas from '../screen/Cadastro/CadastroMedidas';
-
 
 const RouterStack = createNativeStackNavigator();
 
@@ -19,7 +19,7 @@ export default function AppRouter() {
 
   return (
 
-    <RouterStack.Navigator initialRouteName="CadastroMedidas">
+    <RouterStack.Navigator initialRouteName="MontarCardapio">
       <RouterStack.Screen name='Home' component={Home} options={{ headerTransparent: false, headerShown: false }} />
       <RouterStack.Screen name='MontarCardapio' component={MontarCardapio} options={{ headerTransparent: true, headerShown: false }} />
 

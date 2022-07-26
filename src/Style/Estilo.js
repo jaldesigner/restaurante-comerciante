@@ -20,6 +20,13 @@ const Estilo = StyleSheet.create({
         color: cores.corTextoGeral,
     },
 
+    Dividir:{
+        borderBottomWidth:1,
+        borderBottomColor:cores.bordasLinhas,
+        marginTop:20,
+        marginBottom:20,
+    },
+
     //Título nível 1 
     H1: {
         fontSize: 25,
@@ -176,6 +183,21 @@ const Estilo = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff',
+    },
+
+    //Box Geral comuns
+    BoxRow:{
+        flexDirection:'row',
+    },
+
+    //Colunas 1 e 2
+    boxColunaSelecao1:{
+        width:'40%' ,
+        justifyContent:'center',
+    },
+    boxColunaSelecao2:{
+        width:'60%' ,
+        justifyContent:'center',
     },
 
 

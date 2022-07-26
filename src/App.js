@@ -1,5 +1,5 @@
-import { View, Text, StatusBar} from 'react-native';
-import React from 'react';
+import {StatusBar } from 'react-native';
+import React,{useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Routers from './router/index';
 
@@ -8,8 +8,11 @@ import cores from '../src/Style/cores';
 
 //Contexts
 import AuthProvider from '../src/contexts/auth';
+import { CTX_SelecaoPrato } from './contexts';
 
 export default function App() {
+
+  const ctx_selecaoPrato = useState([]);
 
   const MyTheme = {
     dark: true,
@@ -25,10 +28,12 @@ export default function App() {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <AuthProvider>
-        <StatusBar backgroundColor={"#2D2D3F"} barStyle={"light-content"} />
-        <Routers />
-      </AuthProvider>
+      <CTX_SelecaoPrato.Provider value={ctx_selecaoPrato}>
+        <AuthProvider>
+          <StatusBar backgroundColor={"#2D2D3F"} barStyle={"light-content"} />
+          <Routers />
+        </AuthProvider>
+      </CTX_SelecaoPrato.Provider>
     </NavigationContainer>
   )
 }

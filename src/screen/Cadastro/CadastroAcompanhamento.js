@@ -15,7 +15,6 @@ export default function CadastroAcompanhamento() {
   const [atualiza, setAtualiza] = useState(0);
   const [uniId, setUniId] = useState('');
 
-  //Update
   const [modalEdit, setModalEdit] = useState(false);
   const [inptTxtEdit, setInptTxtEdit] = useState('');
   const [uidEdit, setUidEdit] = useState('');
@@ -149,7 +148,6 @@ export default function CadastroAcompanhamento() {
                   const obj = {
                     acompanhamento: inptTxtEdit,
                   };
-                  alert(uidEdit);
                   Atualizar('Acompanhamento',uidEdit,obj,'Item Atualizado com sucesso!');
                   setInptTxtEdit('');
                   setUidEdit('');
