@@ -20,10 +20,6 @@ export default function CadastroAcompanhamento() {
   const [inptTxtEdit, setInptTxtEdit] = useState('');
   const [uidEdit, setUidEdit] = useState('');
 
-  //Adicionar('Acompanhamento',uniId,obj,"Adicionado com sucesso!");
-  //Deletar('Acompanhamento',uniId,'Deletado com sucesso!');
-  //Atualizar( 'Acompanhamento',uniId,obj,'Atualizado com sucesso!');
-
   const CadAcompanhamento = () => {
     let obj = {
       UID: uniId,
@@ -182,7 +178,7 @@ export default function CadastroAcompanhamento() {
             </View>
           </View>
         </Card>
-        <Card titulo="Pratos Cadastrados">
+        <Card titulo="Acompanhamentos Cadastrados">
 
           <View>
             <ListaPratos />

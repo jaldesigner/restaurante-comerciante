@@ -19,7 +19,7 @@ export default function AppRouter() {
 
   return (
 
-    <RouterStack.Navigator initialRouteName="CadastroAcompanhamento">
+    <RouterStack.Navigator initialRouteName="CadastroMedidas">
       <RouterStack.Screen name='Home' component={Home} options={{ headerTransparent: false, headerShown: false }} />
       <RouterStack.Screen name='MontarCardapio' component={MontarCardapio} options={{ headerTransparent: true, headerShown: false }} />
 
