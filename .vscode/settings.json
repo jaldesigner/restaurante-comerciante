@@ -1,5 +1,5 @@
 {
     "emulator.emulatorPathLinux": "~/Android/Sdk/emulator",
     "emulator.emulatorPath": "~/Android/Sdk/emulator",
-    "emulator.androidExtraBootArgs": "~/Android/Sdk/emulator"
+    "emulator.androidExtraBootArgs": ""
 }
