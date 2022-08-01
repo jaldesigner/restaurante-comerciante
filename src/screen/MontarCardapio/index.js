@@ -171,7 +171,7 @@ export default function MontarCardapio({navigation}) {
                 </Picker>
               </View>
 
-              <View style={Estilo.Dividir} />
+              <View style={Estilo.Dicvvidir} />
               <View>
                 <View style={Estilo.BoxRow}>
                   <View style={Estilo.boxColunaSelecao1}>
