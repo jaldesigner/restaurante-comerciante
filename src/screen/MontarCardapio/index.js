@@ -188,7 +188,10 @@ export default function MontarCardapio({navigation}) {
               <Btn2
                 txt="Salvar"
                 fncClique={() => {
-                  navigation.navigate('Cadastro');
+                  setCtxSelecaoPrato({
+                    
+                  });
+                  //navigation.navigate('Cadastro');
                 }}
               />
             </View>
