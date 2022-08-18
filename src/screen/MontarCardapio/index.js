@@ -122,7 +122,7 @@ export default function MontarCardapio({ navigation }) {
 										? arrayValores[index].valor
 										: 'Selecione o valor'
 								}>
-								<Picker.Item label="Selecione o valor" value="" />
+								<Picker.Item label="Selecione o valor" value='' />
 								{ValorPickerValores()}
 								<Picker.Item label="Desativar" value={null} />
 							</Picker>
@@ -137,19 +137,32 @@ export default function MontarCardapio({ navigation }) {
 
 	const Salvar = () => {
 
-		let obj = {
-			prato: selecaoPickerPrato,
-			acompanhamento: selecaoPickerAcompanhamento,
-			tamanho_valor: arrayValoresMedidas,
+		const contaMedidas = medidas.length;
+		const TestaValorVazio = arrayValoresMedidas.map(obj => {
+			return obj.valor;
+		});
+		const RetornoTeste = TestaValorVazio.indexOf('');
+
+		if (selecaoPickerPrato == '' || selecaoPickerAcompanhamento == '') {
+			alert("Selecione o Prato e o acompanhamento!");
+		} else if (arrayValoresMedidas.length < contaMedidas) {
+			alert(`Selecione os valores para as "${contaMedidas}" medidas`);
+		} else if (RetornoTeste != -1) {
+			alert("Selecione um valor para cada medida ou selecione \"Desativar\"");
+		} else {
+			let obj = {
+				prato: selecaoPickerPrato,
+				acompanhamento: selecaoPickerAcompanhamento,
+				tamanho_valor: arrayValoresMedidas,
+			}
+
+			ctxSelecaoPrato[ctxSelecaoPrato.length] = obj;
+
+			setArrayValores([]);
+			setSelecaoPickerAcompanhamento('')
+			setSelecaoPickerPrato('');
+			setAtualiza(1);
 		}
-
-		ctxSelecaoPrato[ctxSelecaoPrato.length] = obj;
-
-
-		setArrayValores([]);
-		setSelecaoPickerAcompanhamento('')
-		setSelecaoPickerPrato('');
-		setAtualiza(1);
 
 	}
 
@@ -157,7 +170,7 @@ export default function MontarCardapio({ navigation }) {
 		const mst = ctxSelecaoPrato.map((item, index) => {
 			const mapValor = item.tamanho_valor.map((i, ind) => {
 				return (
-					<View kay={ind}>
+					<View key={ind}>
 						<Text style={Estilo.txtLinkPositivo}>{i.medida} = {i.valor}</Text>
 					</View>
 				);

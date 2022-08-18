@@ -40,7 +40,6 @@ export default function Dwr(props) {
             <Text style={stl.txtLinkSair}>Sair</Text>
           </TouchableOpacity>
         </View>
-        
       </View>
     </View>
   )
@@ -66,7 +65,7 @@ const stl = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  boxLink: { 
+  boxLink: {
     marginBottom: 10,
     borderBottomColor: "#4E5063",
     borderBottomWidth: 1,
@@ -78,11 +77,11 @@ const stl = StyleSheet.create({
   },
   txtLink: {
     color: '#61C6FF',
-    fontSize:18,
+    fontSize: 18,
   },
   txtLinkSair: {
     color: '#CF565F',
-    fontSize:18,
+    fontSize: 18,
   }
 
 
