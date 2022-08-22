@@ -200,6 +200,15 @@ const Estilo = StyleSheet.create({
         justifyContent:'center',
     },
 
+    boxBtnExcluir:{
+        alignItems: 'center',
+        marginTop:20,
+    },
+    btnExcluir:{
+        backgroundColor: cores.primaria,
+        padding:10,
+        borderRadius:10,
+    },
 
 });
 
