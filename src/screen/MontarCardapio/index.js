@@ -248,26 +248,22 @@ export default function MontarCardapio({ navigation }) {
 					<View style={Estilo.Dividir} />
 				</View>
 			);
-		})
+		});
 		return mst;
 	}
 
-	function MSGCardapioPublicado() {
 
-		cardapioDoDia.map((item,index)=>{
-			if(item.dataPublicacao == dataDeHoje()){
-				console.log("Já tem cardápio Hoje!");
-			}else{
-				console.log('Não tem cadápio');
-			}
+	const MSGCardapioPublicado = ()=> {
+		cardapioDoDia.map((item,index) => {
+			let datas = item.dataPublicacao;
+			let dataH = dataDeHoje();
+			//console.log(item.dataPublicacao)
+
+			/* while(datas === dataH){
+				console.log(item.dataPublicacao);
+			} */
+
 		});
-		
-
-		/* if(!cardapioDoDia){
-			alert("Não tem cardápio hoje");
-		}else{
-			alert('Tem cardapio Hoje');
-		} */
 	}
 
 	MSGCardapioPublicado();
@@ -278,9 +274,6 @@ export default function MontarCardapio({ navigation }) {
 				<View>
 					<Card>
 						{Mostrar()}
-						{/* <Btn2 txt="Navegar" fncClique={() => {
-						navigation.navigate('Cadastro');
-					}} /> */}
 					</Card>
 					<Card>
 						<View style={{ marginBottom: 10 }}>
@@ -317,6 +310,13 @@ export default function MontarCardapio({ navigation }) {
 	return (
 		<SafeAreaView>
 			<ScrollView>
+
+				<View>
+
+					{/*MSGCardapioPublicado()*/}
+
+				</View>
+
 				<Card titulo="Montar Cardápio">
 					<View>
 						<View>
